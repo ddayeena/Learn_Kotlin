@@ -10,10 +10,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
-   // private var flag = true
-    private var flag : Boolean = false
 
+class MainActivity : AppCompatActivity() {
+    private var flag: Boolean = false
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getStringExtra("Value")
+                Toast.makeText(this, " $data", Toast.LENGTH_LONG).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,45 +38,22 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.third).setOnClickListener {
             goToThirdActivity()
         }
-
-
     }
-    //private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult){
-  //      result->
-   //     if(result.resultCode == Activity.RESULT_OK){
-    //        val data = result.data?.getStringExtra("Value")
-   //     }
-  //  }
 
-    private fun goToSecondActivity(){
+    private fun goToSecondActivity() {
         val intent = Intent(this, SecondActivity::class.java)
         intent.putExtra("Value", flag)
-        //startActivity(intent)
-        startActivityForResult(intent,1)
+        activityResultLauncher.launch(intent)
     }
 
-    private fun goToThirdActivity(){
+    private fun goToThirdActivity() {
         val intent = Intent(this, ThirdActivity::class.java)
-        startActivityForResult(intent,1)
-    }
-
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 1 || requestCode == Activity.RESULT_OK){
-            var result = data?.getStringExtra("Value")
-            Toast.makeText(this," $result", Toast.LENGTH_LONG).show()
-        }
+        activityResultLauncher.launch(intent)
     }
 
     fun onClick(view: View) {
         val textView: TextView = findViewById(R.id.textView)
-
         flag = !flag
-
         textView.text = if (flag) getString(R.string.on) else getString(R.string.off)
 
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -77,5 +61,4 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("isFlagOn", flag)
         editor.apply()
     }
-
 }
