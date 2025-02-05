@@ -24,7 +24,7 @@
         android:id="@+id/bClick"
         android:layout_width="215dp"
         android:layout_height="51dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="60dp"
         android:onClick="onClick"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="63dp"
-        android:layout_marginEnd="152dp"
+        android:layout_marginEnd="132dp"
         android:layout_marginBottom="386dp"
         android:text="Second Activity"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,10 +48,57 @@
         android:id="@+id/third"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="12dp"
         android:text="Third Activity"
         app:layout_constraintEnd_toEndOf="@+id/second"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="@+id/second"
         app:layout_constraintTop_toBottomOf="@+id/second" />
+
+    <Button
+        android:id="@+id/photo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="146dp"
+        android:layout_marginEnd="146dp"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="#AF3838"
+        android:text="Take photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="264dp"
+        android:layout_height="243dp"
+        android:layout_marginStart="141dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="142dp"
+        android:layout_marginBottom="7dp"
+        app:layout_constraintBottom_toTopOf="@+id/photo_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/third"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/gallery_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="43dp"
+        android:backgroundTint="#2196F3"
+        android:text="Choose photo from gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photo_button"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
