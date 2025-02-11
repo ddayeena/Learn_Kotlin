@@ -20,8 +20,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
+
 
     private lateinit var imageView: ImageView
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
@@ -84,13 +89,21 @@ class MainActivity : AppCompatActivity() {
         val textView: TextView = findViewById(R.id.textView)
         textView.text = if (flag) getString(R.string.on) else getString(R.string.off)
 
-        findViewById<Button>(R.id.second).setOnClickListener { goToSecondActivity() }
-        findViewById<Button>(R.id.third).setOnClickListener { goToThirdActivity() }
+//        findViewById<Button>(R.id.second).setOnClickListener { goToSecondActivity() }
+//        findViewById<Button>(R.id.third).setOnClickListener { goToThirdActivity() }
 
         findViewById<Button>(R.id.photo_button).setOnClickListener { checkPermissionsAndTakePhoto() }
         findViewById<Button>(R.id.gallery_button).setOnClickListener { pickImageFromGallery() }
-    }
 
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        supportActionBar?.hide()
+
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
     private fun checkPermissionsAndTakePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             takePhoto()
@@ -133,16 +146,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToSecondActivity() {
-        val intent = Intent(this, SecondActivity::class.java)
-        intent.putExtra("Value", flag)
-        startActivity(intent)
-    }
-
-    private fun goToThirdActivity() {
-        val intent = Intent(this, ThirdActivity::class.java)
-        startActivity(intent)
-    }
+//    private fun goToSecondActivity() {
+//        val intent = Intent(this, SecondActivity::class.java)
+//        intent.putExtra("Value", flag)
+//        startActivity(intent)
+//    }
+//
+//    private fun goToThirdActivity() {
+//        val intent = Intent(this, ThirdActivity::class.java)
+//        startActivity(intent)
+//    }
 
     fun onClick(view: View) {
         val textView: TextView = findViewById(R.id.textView)
