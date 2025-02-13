@@ -7,22 +7,40 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.learn.MainFragment"
-        android:label="MainFragment" />
-
-    <fragment
-        android:id="@+id/firstFragment"
-        android:name="com.example.learn.FirstFragment"
-        android:label="First Fragment" >
-        <action
-            android:id="@+id/action_firstFragment_to_secondFragment"
-            app:destination="@id/secondFragment" />
+        android:label="MainFragment" >
+    <action
+        android:id="@+id/action_mainFragment_to_authorizationFragment"
+        app:destination="@id/authorizationFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/secondFragment"
-        android:name="com.example.learn.SecondFragment"
-        android:label="Second Fragment" />
+        android:id="@+id/authorizationFragment"
+        android:name="com.example.learn.AuthorizationFragment"
+        android:label="Authorization Fragment" >
+        <action
+            android:id="@+id/action_authorizationFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_authorizationFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.learn.RegistrationFragment"
+        android:label="Registration Fragment" >
+        <action
+            android:id="@+id/action_registrationFragment_to_authorizationFragment"
+            app:destination="@id/authorizationFragment" />
+        <action
+            android:id="@+id/action_registrationFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainPageFragment"
+        android:name="com.example.learn.MainPageFragment"
+        android:label="Main Page Fragment" />
 
 
 </navigation>

@@ -26,8 +26,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
-
-
+    private lateinit var goToButton: Button
+    private lateinit var photoButton: Button
+    private lateinit var galleryButton: Button
     private lateinit var imageView: ImageView
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
@@ -85,25 +86,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        flag = getSharedPreferences("MyPrefs", MODE_PRIVATE).getBoolean("isFlagOn", true)
-        val textView: TextView = findViewById(R.id.textView)
-        textView.text = if (flag) getString(R.string.on) else getString(R.string.off)
-
-//        findViewById<Button>(R.id.second).setOnClickListener { goToSecondActivity() }
-//        findViewById<Button>(R.id.third).setOnClickListener { goToThirdActivity() }
-
         findViewById<Button>(R.id.photo_button).setOnClickListener { checkPermissionsAndTakePhoto() }
         findViewById<Button>(R.id.gallery_button).setOnClickListener { pickImageFromGallery() }
+
+
+        photoButton = findViewById(R.id.photo_button)
+        galleryButton = findViewById(R.id.gallery_button)
+        imageView = findViewById(R.id.imageView)
+        photoButton.visibility = View.GONE
+        galleryButton.visibility = View.GONE
+        imageView.visibility = View.GONE
+
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        supportActionBar?.hide()
+
+        findViewById<Button>(R.id.button).setOnClickListener {
+            goToButton = findViewById(R.id.button)
+            goToButton.visibility = View.GONE
+            navController.navigate(R.id.authorizationFragment)
+        }
 
     }
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
+
     private fun checkPermissionsAndTakePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             takePhoto()
@@ -146,21 +152,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun goToSecondActivity() {
-//        val intent = Intent(this, SecondActivity::class.java)
-//        intent.putExtra("Value", flag)
-//        startActivity(intent)
-//    }
-//
 //    private fun goToThirdActivity() {
 //        val intent = Intent(this, ThirdActivity::class.java)
 //        startActivity(intent)
 //    }
 
-    fun onClick(view: View) {
-        val textView: TextView = findViewById(R.id.textView)
-        flag = !flag
-        textView.text = if (flag) getString(R.string.on) else getString(R.string.off)
-        getSharedPreferences("MyPrefs", MODE_PRIVATE).edit().putBoolean("isFlagOn", flag).apply()
-    }
+  //  fun onClick(view: View) {
+    //    val textView: TextView = findViewById(R.id.textView)
+      //  flag = !flag
+        //textView.text = if (flag) getString(R.string.on) else getString(R.string.off)
+        //getSharedPreferences("MyPrefs", MODE_PRIVATE).edit().putBoolean("isFlagOn", flag).apply()
+    //}
 }
