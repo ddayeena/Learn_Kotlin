@@ -23,7 +23,13 @@ class AuthorizationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_authorization, container, false)
+        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        if (isLoggedIn) {
+            findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+            return view
+        }
         usernameEditText = view.findViewById(R.id.usernameEditText)
         passwordEditText = view.findViewById(R.id.passwordEditText)
         loginButton = view.findViewById(R.id.loginButton)
@@ -33,13 +39,16 @@ class AuthorizationFragment : Fragment() {
             val enteredUsername = usernameEditText.text.toString()
             val enteredPassword = passwordEditText.text.toString()
 
-            val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
             val savedUsername = sharedPreferences.getString("username", null)
             val savedPassword = sharedPreferences.getString("password", null)
 
             if (enteredUsername == savedUsername && enteredPassword == savedPassword) {
                 Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                val editor = sharedPreferences.edit()
+                editor.putBoolean("isLoggedIn", true)
+                editor.apply()
                 findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+
             } else {
                 Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
             }

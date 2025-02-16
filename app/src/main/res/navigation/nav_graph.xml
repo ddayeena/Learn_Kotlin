@@ -42,5 +42,13 @@
         android:name="com.example.learn.MainPageFragment"
         android:label="Main Page Fragment" />
 
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.learn.ProfileFragment"
+        android:label="Profile Fragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_authorizationFragment"
+            app:destination="@id/authorizationFragment" />
+    </fragment>
 
 </navigation>

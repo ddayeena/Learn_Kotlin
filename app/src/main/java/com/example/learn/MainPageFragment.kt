@@ -1,23 +1,43 @@
 package com.example.learn
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainPageFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fargment_main_page, container, false)
 
+        val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, HomeFragment())
+            .commit()
+
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            val selectedFragment = when (menuItem.itemId) {
+                R.id.home -> HomeFragment()
+                R.id.list -> ListFragment()
+                R.id.mystery -> MysteryFragment()
+                R.id.profile -> ProfileFragment()
+                else -> HomeFragment()
+            }
+
+            childFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, selectedFragment)
+                .commit()
+
+            true
+        }
 
         return view
     }
 }
-
