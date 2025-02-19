@@ -19,6 +19,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import org.json.JSONObject
+import org.json.JSONArray
+
 
 class ProfileFragment : Fragment() {
 
@@ -30,7 +33,11 @@ class ProfileFragment : Fragment() {
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     private val sharedPrefs by lazy {
-        requireContext().getSharedPreferences("photo_prefs", Context.MODE_PRIVATE)
+        requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    }
+
+    private fun getImageKey(userEmail: String): String {
+        return "saved_image_uri_$userEmail"
     }
 
     override fun onCreateView(
@@ -38,29 +45,29 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        val sharedPrefs = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userName = sharedPrefs.getString("username", "Unknown") ?: "Unknown"
-        val userDob = sharedPrefs.getString("dateOfBirth", "Not provided") ?: "Not provided"
-        val userEmail = sharedPrefs.getString("email", "Not provided") ?: "Not provided"
-        val userAboutMe = sharedPrefs.getString("about", "Not provided") ?: "Not provided"
+
+        val currentUserJson = sharedPrefs.getString("currentUser", null)
+        val currentUser = currentUserJson?.let { JSONObject(it) }
+        val userName = currentUser?.getString("username") ?: "Unknown"
+        val userDob = currentUser?.getString("dateOfBirth") ?: "Not provided"
+        val userEmail = currentUser?.getString("email") ?: "Not provided"
+        val userAboutMe = currentUser?.getString("about") ?: "Not provided"
 
         val nameTextView = view.findViewById<TextView>(R.id.user_name)
         val dobTextView = view.findViewById<TextView>(R.id.user_dob)
         val emailTextView = view.findViewById<TextView>(R.id.user_email)
         val aboutMeTextView = view.findViewById<TextView>(R.id.user_about)
+        imageView = view.findViewById(R.id.imageView)
+        galleryButton = view.findViewById(R.id.gallery_button)
+        logoutButton = view.findViewById(R.id.logout_button)
+        deleteUserButton = view.findViewById(R.id.delete_button)
 
         nameTextView.text = "Name: $userName"
         dobTextView.text = "Date of Birth: $userDob"
         emailTextView.text = "Email: $userEmail"
         aboutMeTextView.text = "About Me: $userAboutMe"
 
-
-        imageView = view.findViewById(R.id.imageView)
-        galleryButton = view.findViewById(R.id.gallery_button)
-        logoutButton = view.findViewById(R.id.logout_button)
-        deleteUserButton = view.findViewById(R.id.delete_button)
-
-        loadSavedImage()
+        loadSavedImage(userEmail)
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -68,7 +75,8 @@ class ProfileFragment : Fragment() {
                 selectedImageUri?.let {
                     requireActivity().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     imageView.setImageURI(it)
-                    saveImageUri(it.toString())
+                    // Зберігаємо фото для поточного користувача
+                    saveImageUri(it.toString(), userEmail)
                 } ?: Toast.makeText(context, "Помилка вибору фото", Toast.LENGTH_SHORT).show()
             }
         }
@@ -91,35 +99,42 @@ class ProfileFragment : Fragment() {
         val editAboutButton = view.findViewById<Button>(R.id.edit_about_button)
 
         editNameButton.setOnClickListener {
-            showEditDialog("Edit Name", "Enter your name", "Name", { newName ->
-                saveToSharedPreferences("username", newName)
-                nameTextView.text = "Name: $newName"
-            })
+            editUserField("username", "Name", nameTextView)
         }
 
         editDobButton.setOnClickListener {
-            showEditDialog("Edit Date of Birth", "Enter your date of birth", "Date of Birth", { newDob ->
-                saveToSharedPreferences("dateOfBirth", newDob)
-                dobTextView.text = "Date of Birth: $newDob"
-            })
+            editUserField("dateOfBirth", "Date of Birth", dobTextView)
         }
 
         editEmailButton.setOnClickListener {
-            showEditDialog("Edit Email", "Enter your email", "Email", { newEmail ->
-                saveToSharedPreferences("email", newEmail)
-                emailTextView.text = "Email: $newEmail"
-            })
+            editUserField("email", "Email", emailTextView)
         }
 
         editAboutButton.setOnClickListener {
-            showEditDialog("Edit About Me", "Enter information about yourself", "About Me", { newAbout ->
-                saveToSharedPreferences("about", newAbout)
-                aboutMeTextView.text = "About Me: $newAbout"
-            })
+            editUserField("about", "About Me", aboutMeTextView)
         }
 
         return view
     }
+
+    private fun saveToSharedPreferences(key: String, value: String) {
+        val currentUserJson = sharedPrefs.getString("currentUser", null)
+        val currentUser = currentUserJson?.let { JSONObject(it) } ?: JSONObject()
+
+        currentUser.put(key, value)
+
+        sharedPrefs.edit()
+            .putString("currentUser", currentUser.toString())
+            .apply()
+    }
+
+    private fun editUserField(field: String, fieldName: String, textView: TextView) {
+        showEditDialog("Edit $fieldName", "Enter new $fieldName", fieldName) { newValue ->
+            saveToSharedPreferences(field, newValue)
+            textView.text = "$fieldName: $newValue"
+        }
+    }
+
     private fun showEditDialog(title: String, message: String, hint: String, onSave: (String) -> Unit) {
         val builder = AlertDialog.Builder(requireContext())
         val input = EditText(requireContext())
@@ -141,11 +156,6 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
-    private fun saveToSharedPreferences(key: String, value: String) {
-        val sharedPrefs = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        sharedPrefs.edit().putString(key, value).apply()
-    }
-
     private fun pickImageFromGallery() {
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             type = "image/*"
@@ -154,37 +164,65 @@ class ProfileFragment : Fragment() {
         pickImageLauncher.launch(pickIntent)
     }
 
-    private fun saveImageUri(uri: String) {
-        sharedPrefs.edit().putString("saved_image_uri", uri).apply()
+    private fun saveImageUri(uri: String, userEmail: String) {
+        val key = getImageKey(userEmail)
+        sharedPrefs.edit().putString(key, uri).apply()
     }
 
-    private fun loadSavedImage() {
-        val savedUri = sharedPrefs.getString("saved_image_uri", null)
+    private fun loadSavedImage(userEmail: String) {
+        val key = getImageKey(userEmail)
+        val savedUri = sharedPrefs.getString(key, null)
         savedUri?.let {
             val uri = Uri.parse(it)
             try {
                 requireActivity().contentResolver.openInputStream(uri)?.close()
                 imageView.setImageURI(uri)
             } catch (e: Exception) {
-                Log.e("LoadImage", "Файл недоступний або видалений")
+                Log.e("LoadImage", "Файл недоступний або видалений: ${e.message}")
             }
         }
     }
 
     private fun logout() {
-        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        val editor = sharedPrefs.edit()
         editor.putBoolean("isLoggedIn", false)
+        editor.remove("currentUser")
         editor.apply()
     }
 
     private fun deleteUserData() {
-        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.clear()
+        val editor = sharedPrefs.edit()
+
+        val currentUserJson = sharedPrefs.getString("currentUser", null)
+        val currentUser = currentUserJson?.let { JSONObject(it) }
+        val userEmail = currentUser?.getString("email") ?: return
+
+        val usersJson = sharedPrefs.getString("users", "[]")
+        val usersArray = JSONArray(usersJson)
+        val updatedUsersArray = JSONArray()
+
+        for (i in 0 until usersArray.length()) {
+            val userObj = usersArray.getJSONObject(i)
+            if (userObj.getString("email") != userEmail) {
+                updatedUsersArray.put(userObj)
+            }
+        }
+
+        editor.putString("users", updatedUsersArray.toString())
+
+        editor.remove("currentUser")
+        editor.putBoolean("isLoggedIn", false)
+
+        val imageKey = getImageKey(userEmail)
+        editor.remove(imageKey)
+
         editor.apply()
 
+        Toast.makeText(context, "Користувач успішно видалений", Toast.LENGTH_SHORT).show()
     }
+
+
+
 
     private fun navigateToAuthorization() {
         val intent = Intent(requireContext(), MainActivity::class.java)
