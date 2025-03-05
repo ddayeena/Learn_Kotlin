@@ -6,7 +6,7 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/emailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -26,7 +26,7 @@
         android:minHeight="48dp" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/passwordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Date of Birth(dd-mm-yy)"
+        android:hint="Date of Birth(dd-mm-yyyy)"
         android:inputType="date"
         android:padding="12dp"
         android:minHeight="48dp" />

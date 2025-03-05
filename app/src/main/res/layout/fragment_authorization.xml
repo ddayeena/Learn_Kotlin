@@ -7,7 +7,7 @@
 
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/emailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -17,7 +17,7 @@
         android:padding="12dp" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/passwordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

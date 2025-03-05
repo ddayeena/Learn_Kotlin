@@ -9,46 +9,41 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import org.json.JSONArray
+import com.example.learn.data.database.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AuthorizationFragment : Fragment() {
 
-    private lateinit var usernameEditText: EditText
-    private lateinit var passwordEditText: EditText
+    private lateinit var emailText: EditText
+    private lateinit var passwordText: EditText
     private lateinit var loginButton: Button
     private lateinit var registerButton: Button
+    private lateinit var userDatabase: AppDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_authorization, container, false)
-        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
-        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-        if (isLoggedIn) {
-            findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
-            return view
-        }
-        usernameEditText = view.findViewById(R.id.usernameEditText)
-        passwordEditText = view.findViewById(R.id.passwordEditText)
+        emailText = view.findViewById(R.id.emailText)
+        passwordText = view.findViewById(R.id.passwordText)
         loginButton = view.findViewById(R.id.loginButton)
         registerButton = view.findViewById(R.id.registerButton)
 
-        loginButton.setOnClickListener {
-            val enteredUsername = usernameEditText.text.toString().trim()
-            val enteredPassword = passwordEditText.text.toString().trim()
+        userDatabase = AppDatabase.getDatabase(requireContext())
+        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
-            if (validateUser(enteredUsername, enteredPassword)) {
-                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                val editor = sharedPreferences.edit()
-                editor.putBoolean("isLoggedIn", true)
-                editor.apply()
-                findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
-            } else {
-                Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
-            }
+        if (!sharedPreferences.getString("email", "").isNullOrEmpty()) {
+            findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+        }
+
+        loginButton.setOnClickListener {
+            loginUser()
         }
 
         registerButton.setOnClickListener {
@@ -58,21 +53,31 @@ class AuthorizationFragment : Fragment() {
         return view
     }
 
-    private fun validateUser(username: String, password: String): Boolean {
-        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val usersJson = sharedPreferences.getString("users", "[]") ?: "[]"
-        val usersArray = JSONArray(usersJson)
+    private fun loginUser() {
+        val email = emailText.text.toString().trim()
+        val password = passwordText.text.toString().trim()
 
-        for (i in 0 until usersArray.length()) {
-            val user = usersArray.getJSONObject(i)
-            if (user.getString("username") == username && user.getString("password") == password) {
-                sharedPreferences.edit().apply {
-                    putString("currentUser", user.toString())
-                    apply()
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(requireContext(), "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val user = userDatabase.userDao().getUserByEmailAndPassword(email, password)
+
+            withContext(Dispatchers.Main) {
+                if (user != null) {
+                    val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putString("email", email)
+                    editor.apply()
+
+                    Toast.makeText(requireContext(), "Вхід успішний", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+                } else {
+                    Toast.makeText(requireContext(), "Невірні дані", Toast.LENGTH_SHORT).show()
                 }
-                return true
             }
         }
-        return false
     }
 }
