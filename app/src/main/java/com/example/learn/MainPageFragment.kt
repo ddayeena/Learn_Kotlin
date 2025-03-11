@@ -14,7 +14,7 @@ class MainPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fargment_main_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_main_page, container, false)
 
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -24,9 +24,9 @@ class MainPageFragment : Fragment() {
 
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             val selectedFragment = when (menuItem.itemId) {
-                R.id.home -> HomeFragment()
-                R.id.list -> ListFragment()
-                R.id.mystery -> MysteryFragment()
+                R.id.shop -> HomeFragment()
+                R.id.products -> ListFragment()
+                R.id.cart -> MysteryFragment()
                 R.id.profile -> ProfileFragment()
                 else -> HomeFragment()
             }

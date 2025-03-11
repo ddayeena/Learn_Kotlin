@@ -19,7 +19,7 @@ import com.example.learn.data.entities.User
 
 @Database(
     entities = [User::class, Product::class, Cart::class, CartProducts::class, Order::class, OrderProducts::class],
-    version = 1,
+    version = 4,
     exportSchema = false // Щоб Room не вимагав файл схеми БД
 )
 abstract class AppDatabase : RoomDatabase() {

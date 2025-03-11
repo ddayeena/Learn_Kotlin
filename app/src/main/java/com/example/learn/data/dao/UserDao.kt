@@ -42,10 +42,18 @@ interface UserDao {
     @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
     suspend fun getLastLoggedUser(): User?
 
-
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     suspend fun getUserByEmailAndPassword(email: String, password: String): User?
 
+    @Update
+    fun update(user: User)
+
+    @Query("UPDATE users SET imageUri = :imageUri WHERE email = :email")
+    fun updateUserImage(email: String, imageUri: String)
 
 
 }
+
+
+
+

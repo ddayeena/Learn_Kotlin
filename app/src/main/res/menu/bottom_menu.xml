@@ -1,22 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
-        android:title="Home"
+        android:id="@+id/shop"
+        android:title="Магазин"
         android:icon="@drawable/baseline_home_24"
         />
     <item
-        android:id="@+id/list"
-        android:title="List"
+        android:id="@+id/products"
+        android:title="Товари"
         android:icon="@drawable/baseline_format_list_bulleted_24"
         />
     <item
-        android:id="@+id/mystery"
-        android:title="Mystery"
-        android:icon="@drawable/baseline_question_mark_24"
+        android:id="@+id/cart"
+        android:title="Кошик"
+        android:icon="@drawable/baseline_shopping_cart_24"
          />
     <item
         android:id="@+id/profile"
-        android:title="Profile"
+        android:title="Профіль"
         android:icon="@drawable/baseline_person_24"
          />
 </menu>

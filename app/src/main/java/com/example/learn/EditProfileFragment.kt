@@ -1,0 +1,169 @@
+package com.example.learn
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.learn.data.dao.UserDao
+import com.example.learn.data.database.AppDatabase
+import com.example.learn.data.entities.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class EditProfileFragment: Fragment() {
+    private var currentUser: User? = null
+    private lateinit var userDao: UserDao
+    private var userEmail: String = ""
+    private lateinit var userImageView: ImageView
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+
+        userDao = AppDatabase.getDatabase(requireContext()).userDao()
+        userEmail = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+            .getString("email", "").orEmpty()
+        userImageView = view.findViewById(R.id.user_image)
+        loadUserData(view)
+
+        view.findViewById<Button>(R.id.gallery_button).setOnClickListener {
+            openGallery()
+        }
+
+        view.findViewById<Button>(R.id.edit_name_button).setOnClickListener {
+            showEditDialog("Edit Name", currentUser?.username ?: "") { newName ->
+                updateUser("username", newName)
+            }
+        }
+
+        view.findViewById<Button>(R.id.edit_dob_button).setOnClickListener {
+            showEditDialog("Edit Date of Birth", currentUser?.dateOfBirth ?: "") { newDob ->
+                updateUser("dateOfBirth", newDob)
+            }
+        }
+
+        view.findViewById<Button>(R.id.edit_email_button).setOnClickListener {
+            showEditDialog("Edit Email", currentUser?.email ?: "") { newEmail ->
+                updateUser("email", newEmail)
+            }
+        }
+
+        view.findViewById<Button>(R.id.edit_about_button).setOnClickListener {
+            showEditDialog("Edit About Me", currentUser?.aboutMe ?: "") { newAbout ->
+                updateUser("aboutMe", newAbout)
+            }
+        }
+
+        val backButton = view.findViewById<Button>(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_editProfileFragment_to_mainPageFragment)
+        }
+        return view
+    }
+
+    private fun loadUserData(view: View) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            currentUser = userDao.getUserByEmail(userEmail)
+            withContext(Dispatchers.Main) {
+                currentUser?.let {
+                    view.findViewById<TextView>(R.id.user_name).text = it.username
+                    view.findViewById<TextView>(R.id.user_email).text = it.email
+                    view.findViewById<TextView>(R.id.user_about).text = it.aboutMe ?: "Немає інформації"
+                    view.findViewById<TextView>(R.id.user_dob).text = it.dateOfBirth
+                    val im = it.imageUri
+                    if (!im.isNullOrEmpty()) {
+                        try {
+                            Glide.with(view)
+                                .load(Uri.parse(im))
+                                .into(userImageView)
+                        } catch (e: Exception) {
+                            Log.e("EditProfileFragment", "Помилка завантаження зображення", e)
+                        }
+                    } else {
+                        Log.e("EditProfileFragment", "imageUri порожній або null")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(title)
+        val input = EditText(requireContext())
+        input.setText(currentValue)
+        builder.setView(input)
+        builder.setPositiveButton("Save") { _, _ ->
+            val newValue = input.text.toString()
+            if (newValue.isNotBlank()) onSave(newValue)
+        }
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
+
+    private fun updateUser(field: String, newValue: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            currentUser?.let { user ->
+                when (field) {
+                    "username" -> user.username = newValue
+                    "dateOfBirth" -> user.dateOfBirth = newValue
+                    "email" -> user.email = newValue
+                    "aboutMe" -> user.aboutMe = newValue
+                }
+                userDao.update(user)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "$field updated!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                userImageView.setImageURI(uri)
+                saveImageUriToDatabase(uri.toString())
+            }
+        }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        galleryLauncher.launch(intent)
+    }
+
+    private fun saveImageUriToDatabase(imageUri: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            currentUser?.let { user ->
+                user.imageUri = imageUri
+                userDao.update(user)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Фото оновлено!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+}
