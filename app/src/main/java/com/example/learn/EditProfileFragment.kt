@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -75,11 +77,84 @@ class EditProfileFragment: Fragment() {
             }
         }
 
+        view.findViewById<Button>(R.id.edit_password_button).setOnClickListener {
+            showChangePasswordDialog()
+        }
+
+
         val backButton = view.findViewById<Button>(R.id.back_button)
         backButton.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_mainPageFragment)
         }
         return view
+    }
+    private fun showChangePasswordDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Зміна пароля")
+
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
+
+        val oldPasswordInput = EditText(requireContext()).apply {
+            hint = "Старий пароль"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        val newPasswordInput = EditText(requireContext()).apply {
+            hint = "Новий пароль"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        val confirmPasswordInput = EditText(requireContext()).apply {
+            hint = "Підтвердьте новий пароль"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+
+        layout.addView(oldPasswordInput)
+        layout.addView(newPasswordInput)
+        layout.addView(confirmPasswordInput)
+        builder.setView(layout)
+
+        builder.setPositiveButton("Зберегти") { _, _ ->
+            val oldPassword = oldPasswordInput.text.toString()
+            val newPassword = newPasswordInput.text.toString()
+            val confirmPassword = confirmPasswordInput.text.toString()
+
+            if (oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(context, "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            if (newPassword.length < 6) {
+                Toast.makeText(requireContext(), "Пароль має бути не менше 6 символів", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            if (newPassword != confirmPassword) {
+                Toast.makeText(requireContext(), "Паролі не співпадають", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                currentUser?.let { user ->
+                    if (user.password == oldPassword) { // Перевірка старого пароля
+                        user.password = newPassword
+                        userDao.update(user)
+
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Пароль змінено!", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Старий пароль неправильний", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+
+        builder.setNegativeButton("Скасувати", null)
+        builder.show()
     }
 
     private fun loadUserData(view: View) {

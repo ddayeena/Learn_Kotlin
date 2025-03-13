@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="#C1BBBB"
-                android:text="Редагувати"
+                android:text="Змінити"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="#C1BBBB"
-                android:text="Редагувати"
+                android:text="Змінити"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="#C1BBBB"
-                android:text="Редагувати"
+                android:text="Змінити"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -145,11 +145,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="#C1BBBB"
-                android:text="Редагувати"
+                android:text="Змінити"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:gravity="start"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пароль"
+            android:layout_weight="1"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/edit_password_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#C1BBBB"
+            android:text="Змінити"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <Button
