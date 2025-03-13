@@ -10,15 +10,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Boo! "
+        android:text="Кошик"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/mysteryImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/mystery"
-        android:contentDescription="Mystery Image"/>
 </LinearLayout>

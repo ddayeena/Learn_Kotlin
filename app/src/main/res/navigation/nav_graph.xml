@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment" />
     </fragment>
 
     <fragment
@@ -63,6 +66,15 @@
         android:label="Edit Profile Fragment" >
         <action
             android:id="@+id/action_editProfileFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.example.learn.OrderHistoryFragment"
+        android:label="Order History Fragment" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
     </fragment>
 </navigation>

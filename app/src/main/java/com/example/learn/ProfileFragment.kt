@@ -1,6 +1,5 @@
 package com.example.learn
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,12 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -51,11 +47,16 @@ class ProfileFragment : Fragment() {
         val logoutButton = view.findViewById<Button>(R.id.logout_button)
         val deleteButton = view.findViewById<Button>(R.id.delete_button)
         val editButton = view.findViewById<Button>(R.id.edit_button)
+        val orderHistoryButton = view.findViewById<Button>(R.id.order_history_button)
         deleteButton.setOnClickListener {
             deleteUser()
         }
         editButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_editProfileFragment)
+        }
+
+        orderHistoryButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainPageFragment_to_orderHistoryFragment)
         }
         logoutButton.setOnClickListener {
             logoutUser()
@@ -66,38 +67,6 @@ class ProfileFragment : Fragment() {
 
         return view
     }
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        galleryLauncher.launch(intent)
-    }
-
-    private val galleryLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                val imageUri: Uri? = result.data?.data
-                imageUri?.let {
-                    imageView.setImageURI(it)
-                    saveImageUriToDatabase(it.toString())
-                }
-            }
-        }
-
-    private fun saveImageUriToDatabase(imageUri: String) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            var user = userDao.getUserByEmail(userEmail)
-            if (user != null) {
-                user.imageUri = imageUri
-                userDao.update(user)
-
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Фото оновлено!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
     private fun loadUserData(view: View) {
         lifecycleScope.launch(Dispatchers.IO) {
             currentUser = userDao.getUserByEmail(userEmail)

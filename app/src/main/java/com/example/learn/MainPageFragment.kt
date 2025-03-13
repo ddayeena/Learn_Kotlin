@@ -26,7 +26,7 @@ class MainPageFragment : Fragment() {
             val selectedFragment = when (menuItem.itemId) {
                 R.id.shop -> HomeFragment()
                 R.id.products -> ListFragment()
-                R.id.cart -> MysteryFragment()
+                R.id.cart -> CartFragment()
                 R.id.profile -> ProfileFragment()
                 else -> HomeFragment()
             }
