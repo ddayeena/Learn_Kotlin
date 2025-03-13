@@ -7,37 +7,45 @@
 
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/emailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Name"
+        android:hint="Email"
         android:inputType="text"
         android:minHeight="48dp"
         android:padding="12dp" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/passwordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Password"
+        android:hint="Пароль"
         android:inputType="textPassword"
-        android:padding="12dp"
-        android:minHeight="48dp"/>
+        android:minHeight="48dp"
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Login" />
+        android:text="Вхід" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Registration" />
+        android:text="Немає акаунту? Зареєструйтеся"
+        android:background="@android:color/transparent"
+        android:textColor="?attr/colorPrimary"
+        android:textAllCaps="false"
+        android:padding="8dp"
+        android:gravity="center"
+        android:stateListAnimator="@null"
+        android:drawablePadding="4dp"
+        android:layout_marginBottom="4dp"/>
 
 </LinearLayout>

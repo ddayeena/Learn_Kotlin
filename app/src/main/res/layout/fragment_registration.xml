@@ -6,14 +6,14 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/emailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
-        android:inputType="text"
-        android:padding="12dp"
         android:layout_marginTop="10dp"
-        android:minHeight="48dp" />
+        android:hint="Ім'я"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/emailEditText"
@@ -26,51 +26,58 @@
         android:minHeight="48dp" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/passwordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Password"
+        android:hint="Пароль"
         android:inputType="textPassword"
-        android:padding="12dp"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/dateOfBirthEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Date of Birth(dd-mm-yy)"
+        android:hint="Дата народження(дд-мм-рррр)"
         android:inputType="date"
-        android:padding="12dp"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/aboutEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="About"
-        android:inputType="textMultiLine"
-        android:padding="12dp"
-        android:minHeight="96dp"
         android:gravity="top|start"
-        android:lines="4" />
+        android:hint="Про мене"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:minHeight="96dp"
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Registration" />
+        android:text="Реєстрація" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Login" />
-
+        android:layout_marginTop="10dp"
+        android:text="Уже є акаунт? Увійти"
+        android:background="@android:color/transparent"
+        android:textColor="?attr/colorPrimary"
+        android:textAllCaps="false"
+        android:padding="8dp"
+        android:gravity="center"
+        android:stateListAnimator="@null"
+        android:drawablePadding="4dp"
+        android:layout_marginBottom="4dp"/>
 
 
 </LinearLayout>
