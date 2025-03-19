@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_orderHistoryFragment"
             app:destination="@id/orderHistoryFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
     </fragment>
 
     <fragment
@@ -75,6 +78,15 @@
         android:label="Order History Fragment" >
         <action
             android:id="@+id/action_orderHistoryFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.example.learn.AddProductFragment"
+        android:label="Add Product Fragment" >
+        <action
+            android:id="@+id/action_addProductFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
     </fragment>
 </navigation>

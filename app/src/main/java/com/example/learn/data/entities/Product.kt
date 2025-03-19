@@ -9,7 +9,7 @@ data class Product(
     val name: String,
     val description: String,
     val price: Float,
-    val imageUrl: String,
+    val imageUrl: String?,
     val category: String,
     val stock: Int,
     val weight: Int

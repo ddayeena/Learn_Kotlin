@@ -24,7 +24,7 @@ class ListFragment : Fragment() {
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager = view.findViewById(R.id.viewPager)
 
-        val categories = listOf("Чіпси", "Горішки", "Сухарики", "Солодощі")
+        val categories = listOf("Солоні снеки", "Горішки", "Здорові перекуси", "Солодощі")
 
         adapter = CategoryPagerAdapter(this, categories)
         viewPager.adapter = adapter
