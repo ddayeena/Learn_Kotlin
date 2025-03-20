@@ -84,13 +84,13 @@ class RegistrationFragment : Fragment() {
                     imageUri = "",
                     role = "user" // За замовчуванням user
                 )
-                db.userDao().insertUser(newUser)
+                val userId = db.userDao().insertUser(newUser)
 
                 val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
                 val editor = sharedPreferences.edit()
                 editor.putString("email", email)
                 editor.apply()
-
+                db.cartDao().createCart(userId.toInt())
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Реєстрація успішна!", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_registrationFragment_to_mainPageFragment)
