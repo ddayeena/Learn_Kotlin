@@ -22,6 +22,7 @@ import com.example.learn.data.entities.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class ProfileFragment : Fragment() {
     private lateinit var imageView: ImageView
@@ -48,13 +49,16 @@ class ProfileFragment : Fragment() {
         val deleteButton = view.findViewById<Button>(R.id.delete_button)
         val editButton = view.findViewById<Button>(R.id.edit_button)
         val orderHistoryButton = view.findViewById<Button>(R.id.order_history_button)
+        val addProductButton = view.findViewById<Button>(R.id.add_product_button)
         deleteButton.setOnClickListener {
             deleteUser()
         }
         editButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_editProfileFragment)
         }
-
+        addProductButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainPageFragment_to_addProductFragment)
+        }
         orderHistoryButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_orderHistoryFragment)
         }
@@ -77,12 +81,17 @@ class ProfileFragment : Fragment() {
                     view.findViewById<TextView>(R.id.user_dob).text = it.dateOfBirth
                     view.findViewById<TextView>(R.id.user_about).text = it.aboutMe
 
-                    val im = it.imageUri
-                    if (!im.isNullOrEmpty()) {
+                    val imagePath = it.imageUri
+                    if (!imagePath.isNullOrEmpty()) {
                         try {
-                            Glide.with(view)
-                                .load(Uri.parse(im))
-                                .into(imageView)
+                            val file = File(imagePath)
+                            if (file.exists()) {
+                                Glide.with(view)
+                                    .load(file)
+                                    .into(imageView)
+                            } else {
+                                Log.e("EditProfileFragment", "Файл не знайдено за шляхом: $imagePath")
+                            }
                         } catch (e: Exception) {
                             Log.e("EditProfileFragment", "Помилка завантаження зображення", e)
                         }

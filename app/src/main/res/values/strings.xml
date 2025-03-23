@@ -2,4 +2,13 @@
     <string name="app_name">Learn</string>
     <string name="on">on</string>
     <string name="off">off</string>
+
+    <string-array name="product_categories">
+        <item>Солоні снеки</item>
+        <item>Горішки</item>
+        <item>Здорові перекуси</item>
+        <item>Солодощі</item>
+    </string-array>
+
 </resources>
+

@@ -6,7 +6,7 @@ import com.example.learn.data.entities.User
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)  // Додає нового користувача
+    suspend fun insertUser(user: User): Long  // Додає нового користувача
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password")
      fun getUser(email: String, password: String): User? // Пошук користувача

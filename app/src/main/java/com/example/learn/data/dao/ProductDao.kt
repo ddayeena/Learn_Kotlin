@@ -26,4 +26,7 @@ interface ProductDao {
     // Видаляємо продукт
     @Delete
     suspend fun deleteProduct(product: Product)
+
+    @Query("SELECT * FROM products WHERE category = :category")
+    fun getProductsByCategory(category: String): List<Product>
 }

@@ -29,6 +29,8 @@ import com.example.learn.data.entities.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 class EditProfileFragment: Fragment() {
     private var currentUser: User? = null
@@ -166,18 +168,24 @@ class EditProfileFragment: Fragment() {
                     view.findViewById<TextView>(R.id.user_email).text = it.email
                     view.findViewById<TextView>(R.id.user_about).text = it.aboutMe ?: "Немає інформації"
                     view.findViewById<TextView>(R.id.user_dob).text = it.dateOfBirth
-                    val im = it.imageUri
-                    if (!im.isNullOrEmpty()) {
+                    val imagePath = it.imageUri
+                    if (!imagePath.isNullOrEmpty()) {
                         try {
-                            Glide.with(view)
-                                .load(Uri.parse(im))
-                                .into(userImageView)
+                            val file = File(imagePath)
+                            if (file.exists()) {
+                                Glide.with(view)
+                                    .load(file)
+                                    .into(userImageView)
+                            } else {
+                                Log.e("EditProfileFragment", "Файл не знайдено за шляхом: $imagePath")
+                            }
                         } catch (e: Exception) {
                             Log.e("EditProfileFragment", "Помилка завантаження зображення", e)
                         }
                     } else {
                         Log.e("EditProfileFragment", "imageUri порожній або null")
                     }
+
                 }
             }
         }
@@ -218,7 +226,7 @@ class EditProfileFragment: Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 userImageView.setImageURI(uri)
-                saveImageUriToDatabase(uri.toString())
+                saveImageUriToDatabase(uri)
             }
         }
     }
@@ -230,7 +238,31 @@ class EditProfileFragment: Fragment() {
         galleryLauncher.launch(intent)
     }
 
-    private fun saveImageUriToDatabase(imageUri: String) {
+    private fun saveImageUriToDatabase(uri: Uri): String? {
+        val context = requireContext()
+        val fileName = "avatar_${System.currentTimeMillis()}.png"
+        val file = File(context.filesDir, fileName)
+
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+
+            val filePath = file.absolutePath // Шлях до збереженого файлу
+
+            // Оновлюємо користувача в базі даних, зберігаючи шлях до файлу
+            saveUserImageUriToDatabase(filePath)
+
+            filePath // Повертаємо шлях до файлу
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun saveUserImageUriToDatabase(imageUri: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             currentUser?.let { user ->
                 user.imageUri = imageUri
@@ -241,4 +273,6 @@ class EditProfileFragment: Fragment() {
             }
         }
     }
+
+
 }
