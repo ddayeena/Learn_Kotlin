@@ -11,6 +11,6 @@ data class Product(
     val price: Float,
     val imageUrl: String?,
     val category: String,
-    val stock: Int,
+    var stock: Int,
     val weight: Int
 )

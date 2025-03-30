@@ -22,4 +22,10 @@ interface CartProductsDao {
 
     @Delete
     fun deleteCartProduct(cartProduct: CartProducts)
+
+    @Update
+    fun updateCartProduct(cartProduct: CartProducts)
+
+    @Query("DELETE FROM cart_products WHERE cartId = :cartId")
+    suspend fun clearCart(cartId: Int)
 }

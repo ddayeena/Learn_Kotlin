@@ -11,6 +11,7 @@ data class User(
     var password: String, // Пароль
     var aboutMe: String?, // Про себе (може бути null)
     var dateOfBirth: String, // Дата народження
-    var imageUri: String?,
+    var phoneNumber: String, // Номер телефону
+    var imageUri: String?,  // Посилання на аватар
     val role: String = "user" // Роль (user або admin), за замовчуванням user
 )

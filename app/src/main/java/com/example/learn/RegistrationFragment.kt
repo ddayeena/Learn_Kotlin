@@ -24,6 +24,7 @@ class RegistrationFragment : Fragment() {
     private lateinit var passwordEditText: EditText
     private lateinit var dateOfBirthEditText: EditText
     private lateinit var aboutEditText: EditText
+    private lateinit var phoneNumberEditText: EditText
     private lateinit var registerButton: Button
     private lateinit var loginButton: Button
     private lateinit var db: AppDatabase  // БД
@@ -48,6 +49,7 @@ class RegistrationFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.passwordText)
         dateOfBirthEditText = view.findViewById(R.id.dateOfBirthEditText)
         aboutEditText = view.findViewById(R.id.aboutEditText)
+        phoneNumberEditText = view.findViewById(R.id.phoneNumberEditText)
         registerButton = view.findViewById(R.id.registerButton)
         loginButton = view.findViewById(R.id.loginButton)
         registerButton.setOnClickListener {
@@ -56,9 +58,10 @@ class RegistrationFragment : Fragment() {
             val password = passwordEditText.text.toString().trim()
             val dateOfBirth = dateOfBirthEditText.text.toString().trim()
             val about = aboutEditText.text.toString().trim()
+            val phoneNumber = phoneNumberEditText.text.toString().trim()
 
-            if (validateInput(username, email, password, dateOfBirth, about)) {
-                registerUser(username, email, password, dateOfBirth, about)
+            if (validateInput(username, email, password, dateOfBirth, about, phoneNumber)) {
+                registerUser(username, email, password, dateOfBirth,about, phoneNumber)
             }
         }
         loginButton.setOnClickListener {
@@ -67,7 +70,7 @@ class RegistrationFragment : Fragment() {
         return view
     }
 
-    private fun registerUser(username: String, email: String, password: String, dateOfBirth: String, about: String) {
+    private fun registerUser(username: String, email: String, password: String, dateOfBirth: String, about: String, phoneNumber: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             val existingUser = db.userDao().getUserByEmail(email)
             if (existingUser != null) {
@@ -82,6 +85,7 @@ class RegistrationFragment : Fragment() {
                     dateOfBirth = dateOfBirth,
                     aboutMe = about,
                     imageUri = "",
+                    phoneNumber = phoneNumber,
                     role = "user" // За замовчуванням user
                 )
                 val userId = db.userDao().insertUser(newUser)
@@ -99,7 +103,7 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun validateInput(username: String, email: String, password: String, dateOfBirth: String, about: String): Boolean {
+    private fun validateInput(username: String, email: String, password: String, dateOfBirth: String, about: String, phoneNumber: String): Boolean {
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || dateOfBirth.isEmpty()) {
             Toast.makeText(context, "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show()
             return false

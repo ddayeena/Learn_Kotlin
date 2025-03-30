@@ -9,7 +9,7 @@ data class Order(
     val userId: Int,
     val date: Long,    // Дата замовлення
     val status: String, // Статус замовлення ("Pending", "Confirmed", "Canceled")
-    val paymentMethod: String,  // "Cash" або "Card"
+    val paymentMethod: String,  // "Оплата картою" або "Післяоплата"
     val region: String,// Область
     val city: String, // Місто
     val street: String,// Вулиця
