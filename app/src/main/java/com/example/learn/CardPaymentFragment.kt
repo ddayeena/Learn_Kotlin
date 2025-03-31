@@ -2,6 +2,8 @@ package com.example.learn
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +36,6 @@ class CardPaymentFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_card_payment, container, false)
         db = AppDatabase.getDatabase(requireContext())
 
-        // Отримання переданих даних
         arguments?.let {
             region = it.getString("region", "")
             city = it.getString("city", "")
@@ -43,23 +44,51 @@ class CardPaymentFragment : Fragment() {
         }
 
         val cardNumberInput = view.findViewById<EditText>(R.id.editTextCardNumber)
-        val cardHolder = view.findViewById<EditText>(R.id.editTextCardHolder)
+        val cardHolderInput = view.findViewById<EditText>(R.id.editTextCardHolder)
         val expiryDateInput = view.findViewById<EditText>(R.id.editTextExpiry)
         val cvvInput = view.findViewById<EditText>(R.id.editTextCVV)
-
         val confirmPaymentButton = view.findViewById<Button>(R.id.buttonPay)
+
+        // Додаємо обробник для автоматичного форматування дати MM/YY
+        expiryDateInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s?.length == 2 && !s.contains("/")) {
+                    expiryDateInput.setText("$s/")
+                    expiryDateInput.setSelection(3)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         confirmPaymentButton.setOnClickListener {
             val cardNumber = cardNumberInput.text.toString().trim()
             val expiryDate = expiryDateInput.text.toString().trim()
             val cvv = cvvInput.text.toString().trim()
-            val cardHolder = cardHolder.text.toString().trim()
+            val cardHolder = cardHolderInput.text.toString().trim()
 
-            if (cardNumber.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty() || cardHolder.isEmpty()){
-                Toast.makeText(requireContext(), "Будь ласка, заповніть всі поля!", Toast.LENGTH_SHORT).show()
+            if (cardNumber.length != 16 || !cardNumber.all { it.isDigit() }) {
+                Toast.makeText(requireContext(), "Номер картки повинен містити 16 цифр!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            if (!expiryDate.matches(Regex("^(0[1-9]|1[0-2])/[0-9]{2}\$"))) {
+                Toast.makeText(requireContext(), "Невірний формат дати! Використовуйте MM/YY", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (cvv.length !in 3..4 || !cvv.all { it.isDigit() }) {
+                Toast.makeText(requireContext(), "CVV повинен містити 3!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (cardHolder.isEmpty()) {
+                Toast.makeText(requireContext(), "Будь ласка, введіть ім'я власника картки!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             placeOrder()
+        }
+
+        val backButton = view.findViewById<ImageView>(R.id.back_to_order_button)
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_cardPaymentFragment_to_createOrderFragment)
         }
 
         return view
@@ -105,6 +134,7 @@ class CardPaymentFragment : Fragment() {
             db.cartProductsDao().clearCart(cart.id)
 
             withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Оплата успішна!", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_cardPaymentFragment_to_orderConfirmationFragment)
             }
         }

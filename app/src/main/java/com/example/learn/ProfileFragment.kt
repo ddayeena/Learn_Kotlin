@@ -111,6 +111,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun deleteUser() {
+        logoutUser()
         lifecycleScope.launch(Dispatchers.IO) {
             currentUser?.let { userDao.delete(it) }
             withContext(Dispatchers.Main) {

@@ -149,7 +149,7 @@ class CreateOrderFragment : Fragment() {
                 Order(
                     userId = user.id,
                     date = System.currentTimeMillis(),
-                    status = "Pending",
+                    status = "В очікуванні",
                     paymentMethod = paymentMethod,
                     region = region,
                     city = city,
@@ -178,9 +178,7 @@ class CreateOrderFragment : Fragment() {
 
             db.cartProductsDao().clearCart(cart.id)
 
-            withContext(Dispatchers.Main) {
-                findNavController().navigate(R.id.action_createOrderFragment_to_orderConfirmationFragment)
-            }
+
         }
     }
     private fun showConfirmationDialog(region: String, city: String, street: String, paymentMethod: String) {
@@ -197,8 +195,9 @@ class CreateOrderFragment : Fragment() {
                     }
                     findNavController().navigate(R.id.action_createOrderFragment_to_cardPaymentFragment, bundle)
                 } else {
+                    findNavController().navigate(R.id.action_createOrderFragment_to_orderConfirmationFragment)
                     placeOrder(region, city, street, paymentMethod)
-
+                    Toast.makeText(requireContext(), "Замовлення створене!", Toast.LENGTH_SHORT).show()
 
                 }
             }

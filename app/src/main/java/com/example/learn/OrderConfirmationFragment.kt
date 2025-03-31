@@ -16,8 +16,8 @@ class OrderConfirmationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_order_confirmation, container, false)
-        val toMainPageButton = view.findViewById<ImageView>(R.id.goToHomeButton)
-        val toOrderHistory = view.findViewById<ImageView>(R.id.goToOrderHistoryButton)
+        val toMainPageButton = view.findViewById<Button>(R.id.goToHomeButton)
+        val toOrderHistory = view.findViewById<Button>(R.id.goToOrderHistoryButton)
         toMainPageButton.setOnClickListener {
             findNavController().navigate(R.id.action_orderConfirmationFragment_to_mainPageFragment)
         }

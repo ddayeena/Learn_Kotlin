@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_createOrderFragment"
             app:destination="@id/createOrderFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_orderConfirmationFragment"
+            app:destination="@id/orderConfirmationFragment" />
     </fragment>
 
     <fragment
@@ -98,20 +101,20 @@
         android:name="com.example.learn.CreateOrderFragment"
         android:label="Create Order Fragment" >
         <action
-            android:id="@+id/action_createOrderFragment_to_mainPageFragment"
-            app:destination="@id/mainPageFragment" />
+            android:id="@+id/action_createOrderFragment_to_cardPaymentFragment"
+            app:destination="@id/cardPaymentFragment" />
         <action
             android:id="@+id/action_createOrderFragment_to_orderConfirmationFragment"
             app:destination="@id/orderConfirmationFragment" />
         <action
-            android:id="@+id/action_createOrderFragment_to_cardPaymentFragment"
-            app:destination="@id/cardPaymentFragment" />
+            android:id="@+id/action_createOrderFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/orderConfirmationFragment"
         android:name="com.example.learn.OrderConfirmationFragment"
-        android:label="Order Confirmed Fragment" >
+        android:label="Order Confirmation Fragment" >
         <action
             android:id="@+id/action_orderConfirmationFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />

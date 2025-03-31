@@ -8,7 +8,7 @@ data class Order(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val userId: Int,
     val date: Long,    // Дата замовлення
-    val status: String, // Статус замовлення ("Pending", "Confirmed", "Canceled")
+    val status: String, // Статус замовлення ("В очікуванні", "Відправлено", "Доставлено")
     val paymentMethod: String,  // "Оплата картою" або "Післяоплата"
     val region: String,// Область
     val city: String, // Місто

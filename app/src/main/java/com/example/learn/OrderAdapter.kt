@@ -1,5 +1,6 @@
 package com.example.learn
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,18 @@ class OrderAdapter(private val orders: List<Order>) : RecyclerView.Adapter<Order
         holder.orderDate.text = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(order.date)
         holder.orderAmount.text = "Сума: ${order.totalAmount} грн"
         holder.orderStatus.text = order.status
+        holder.orderStatus.setBackgroundColor(getStatusColor(order.status))
+
     }
 
     override fun getItemCount() = orders.size
+
+    private fun getStatusColor(status: String): Int {
+        return when (status) {
+            "В очікуванні" -> Color.GRAY
+            "Відправлено" -> Color.BLUE
+            "Доставлено" -> Color.GREEN
+            else -> Color.GRAY
+        }
+    }
 }
