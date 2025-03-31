@@ -23,7 +23,17 @@
         <action
             android:id="@+id/action_authorizationFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_authorizationFragment_to_adminMainPageFragment"
+            app:destination="@id/adminMainPageFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/adminMainPageFragment"
+        android:name="com.example.learn.AdminMainPageFragment"
+        android:label="Admin Page Fragment" >
+    </fragment>
+
 
     <fragment
         android:id="@+id/registrationFragment"

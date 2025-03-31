@@ -73,7 +73,9 @@ class AuthorizationFragment : Fragment() {
                     editor.apply()
 
                     Toast.makeText(requireContext(), "Вхід успішний", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+                    if(user.role === "user")        findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+                    else  findNavController().navigate(R.id.action_authorizationFragment_to_adminMainPageFragment)
+
                 } else {
                     Toast.makeText(requireContext(), "Невірні дані", Toast.LENGTH_SHORT).show()
                 }

@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="Головна сторінка"
+        android:icon="@drawable/baseline_home_24"
+        android:enabled="true"
+        android:iconTint="?attr/colorControlNormal" />
+
+    <item
+        android:id="@+id/products"
+        android:title="Товари"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
+        android:enabled="true"
+        android:iconTint="?attr/colorControlNormal" />
+
+    <item
+        android:id="@+id/orders"
+        android:title="Замовлення"
+        android:icon="@drawable/baseline_dashboard_24"
+        android:enabled="true"
+        android:iconTint="?attr/colorControlNormal" />
+
+    <item
+        android:id="@+id/profile"
+        android:title="Профіль"
+        android:icon="@drawable/baseline_person_24"
+        android:enabled="true"
+        android:iconTint="?attr/colorControlNormal" />
+</menu>
