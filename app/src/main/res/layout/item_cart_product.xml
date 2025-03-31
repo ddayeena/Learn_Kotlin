@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -32,36 +31,49 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/cartProductPrice"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ціна: 100 грн"
-            android:textSize="14sp"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/cartProductDecrease"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/minus"
+                android:contentDescription="Зменшити кількість"/>
+
+            <TextView
+                android:id="@+id/cartProductQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="16sp"
+                android:paddingHorizontal="12dp"/>
+
+            <ImageView
+                android:id="@+id/cartProductIncrease"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/plus"
+                android:contentDescription="Збільшити кількість"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/cartProductTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Всього: 200 грн"
+            android:text="Всього: 100 грн"
             android:textSize="14sp"
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/cartProductQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="x2"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-
-    <!-- Додаємо ImageView для хрестика -->
     <ImageView
         android:id="@+id/cartProductDelete"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:contentDescription="Видалити товар"
-        android:src="@drawable/ic_delete"/>
+        android:src="@drawable/baseline_cancel_24"/>
 </LinearLayout>

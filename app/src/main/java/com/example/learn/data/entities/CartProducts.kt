@@ -18,5 +18,5 @@ data class CartProducts(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val cartId: Int,    // ID кошика
     val productId: Int, // ID товару
-    val quantity: Int   // Кількість товару у кошику
+    var quantity: Int   // Кількість товару у кошику
 )

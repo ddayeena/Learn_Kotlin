@@ -7,7 +7,7 @@ import com.example.learn.data.entities.Order
 @Dao
 interface OrderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun placeOrder(order: Order): Long
+    suspend fun insert(order: Order): Long
 
     @Query("SELECT * FROM orders WHERE userId = :userId ORDER BY date DESC")
     suspend fun getOrdersByUserId(userId: Int): List<Order>

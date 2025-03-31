@@ -24,7 +24,15 @@
         android:inputType="textEmailAddress"
         android:padding="12dp"
         android:minHeight="48dp" />
-
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Номер телефону"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="12dp" />
     <EditText
         android:id="@+id/passwordText"
         android:layout_width="match_parent"

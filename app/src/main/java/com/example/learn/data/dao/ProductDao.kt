@@ -21,7 +21,7 @@ interface ProductDao {
 
     // Оновлюємо продукт
     @Update
-    suspend fun updateProduct(product: Product)
+    suspend fun update(product: Product)
 
     // Видаляємо продукт
     @Delete
