@@ -56,7 +56,7 @@
                 android:id="@+id/cartProductIncrease"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/plus"
+                android:src="@drawable/baseline_add_circle_24"
                 android:contentDescription="Збільшити кількість"/>
         </LinearLayout>
 
