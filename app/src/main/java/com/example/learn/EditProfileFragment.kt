@@ -86,7 +86,17 @@ class EditProfileFragment: Fragment() {
 
         val backButton = view.findViewById<Button>(R.id.back_button)
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_editProfileFragment_to_mainPageFragment)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val user = userDao.getUserByEmail(userEmail)
+                withContext(Dispatchers.Main) {
+                    if (user?.role == "user") {
+                        findNavController().navigate(R.id.action_editProfileFragment_to_mainPageFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_editProfileFragment_to_adminMainPageFragment)
+                    }
+                }
+            }
+
         }
         return view
     }

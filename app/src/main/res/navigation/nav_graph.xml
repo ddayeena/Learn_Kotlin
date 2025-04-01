@@ -32,6 +32,9 @@
         android:id="@+id/adminMainPageFragment"
         android:name="com.example.learn.AdminMainPageFragment"
         android:label="Admin Page Fragment" >
+        <action
+            android:id="@+id/action_adminMainPageFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
 
 
@@ -86,6 +89,9 @@
         <action
             android:id="@+id/action_editProfileFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_editProfileFragment_to_adminMainPageFragment"
+            app:destination="@id/adminMainPageFragment" />
     </fragment>
 
     <fragment

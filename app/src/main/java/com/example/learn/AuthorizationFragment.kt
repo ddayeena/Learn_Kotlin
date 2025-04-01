@@ -37,9 +37,20 @@ class AuthorizationFragment : Fragment() {
 
         userDatabase = AppDatabase.getDatabase(requireContext())
         val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val savedEmail = sharedPreferences.getString("email", "")
 
-        if (!sharedPreferences.getString("email", "").isNullOrEmpty()) {
-            findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+        if (!savedEmail.isNullOrEmpty()) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val user = userDatabase.userDao().getUserByEmail(savedEmail)
+
+                withContext(Dispatchers.Main) {
+                    if (user?.role == "user") {
+                        findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_authorizationFragment_to_adminMainPageFragment)
+                    }
+                }
+            }
         }
 
         loginButton.setOnClickListener {
@@ -73,7 +84,7 @@ class AuthorizationFragment : Fragment() {
                     editor.apply()
 
                     Toast.makeText(requireContext(), "Вхід успішний", Toast.LENGTH_SHORT).show()
-                    if(user.role === "user")        findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
+                    if(user.role == "user")        findNavController().navigate(R.id.action_authorizationFragment_to_mainPageFragment)
                     else  findNavController().navigate(R.id.action_authorizationFragment_to_adminMainPageFragment)
 
                 } else {

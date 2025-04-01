@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.learn.admin.AdminHomeFragment
 import com.example.learn.admin.AdminOrdersFragment
 import com.example.learn.admin.AdminProductsFragment
 import com.example.learn.admin.AdminProfileFragment
@@ -23,17 +22,16 @@ class AdminMainPageFragment : Fragment() {
 
         // Початковий фрагмент (Головна сторінка)
         childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, AdminHomeFragment())
+            .replace(R.id.fragmentContainer, AdminProfileFragment())
             .commit()
 
         // Обробка натискання на пункти меню
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             val selectedFragment = when (menuItem.itemId) {
-                R.id.home -> AdminHomeFragment()
                 R.id.products -> AdminProductsFragment()
                 R.id.orders -> AdminOrdersFragment()
                 R.id.profile -> AdminProfileFragment()
-                else -> AdminHomeFragment()
+                else -> AdminProfileFragment()
             }
 
             childFragmentManager.beginTransaction()
