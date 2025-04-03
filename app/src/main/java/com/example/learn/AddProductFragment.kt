@@ -53,7 +53,7 @@ class AddProductFragment : Fragment() {
         userDatabase = Room.databaseBuilder(requireContext(), AppDatabase::class.java, "app_database").build()
         productDao = userDatabase.productDao()
 
-        val backButton = view.findViewById<Button>(R.id.back_from_add_product)
+        val backButton = view.findViewById<ImageView>(R.id.back_from_add_product)
         val editTextName = view.findViewById<EditText>(R.id.edit_text_name)
         val editTextDescription = view.findViewById<EditText>(R.id.edit_text_description)
         val editTextPrice = view.findViewById<EditText>(R.id.edit_text_price)
@@ -70,38 +70,59 @@ class AddProductFragment : Fragment() {
         }
 
         buttonAddProduct.setOnClickListener {
-            val name = editTextName.text.toString()
-            val description = editTextDescription.text.toString()
-            val price = editTextPrice.text.toString().toFloatOrNull() ?: 0f
-            val category = categorySpinner.selectedItem.toString()  // Вибір категорії зі Spinner
-            val stock = editTextStock.text.toString().toIntOrNull() ?: 0
-            val weight = editTextWeight.text.toString().toIntOrNull() ?: 0
+            val name = editTextName.text.toString().trim()
+            val description = editTextDescription.text.toString().trim()
+            val priceText = editTextPrice.text.toString().trim()
+            val stockText = editTextStock.text.toString().trim()
+            val weightText = editTextWeight.text.toString().trim()
+            val category = categorySpinner.selectedItem.toString()
 
-            if (name.isNotEmpty() && description.isNotEmpty()) {
-                val product = Product(
-                    name = name,
-                    description = description,
-                    price = price,
-                    imageUrl = imagePath,
-                    category = category,
-                    stock = stock,
-                    weight = weight
-                )
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    productDao.insertProduct(product)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Товар додано!", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
-                    }
-                }
-            } else {
+            // Перевірка, чи всі поля заповнені
+            if (name.isEmpty() || description.isEmpty() || priceText.isEmpty() ||
+                stockText.isEmpty() || weightText.isEmpty() || imagePath == null) {
                 Toast.makeText(requireContext(), "Заповніть всі поля!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Перевірка числових значень
+            val price = priceText.toFloatOrNull()
+            val stock = stockText.toIntOrNull()
+            val weight = weightText.toIntOrNull()
+
+            if (price == null || price <= 0) {
+                Toast.makeText(requireContext(), "Некоректна ціна!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (stock == null || stock < 0) {
+                Toast.makeText(requireContext(), "Некоректна кількість на складі!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (weight == null || weight <= 0) {
+                Toast.makeText(requireContext(), "Некоректна вага!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val product = Product(
+                name = name,
+                description = description,
+                price = price,
+                imageUrl = imagePath,
+                category = category,
+                stock = stock,
+                weight = weight
+            )
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                productDao.insertProduct(product)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Товар додано!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
             }
         }
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_addProductFragment_to_mainPageFragment)
+            findNavController().navigate(R.id.action_addProductFragment_to_adminMainPageFragment)
         }
 
         return view

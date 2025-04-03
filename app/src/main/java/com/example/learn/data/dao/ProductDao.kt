@@ -25,8 +25,11 @@ interface ProductDao {
 
     // Видаляємо продукт
     @Delete
-    suspend fun deleteProduct(product: Product)
+     fun deleteProduct(product: Product)
 
     @Query("SELECT * FROM products WHERE category = :category")
     fun getProductsByCategory(category: String): List<Product>
+
+    @Query("SELECT * FROM products WHERE name LIKE :name")
+    fun searchProductsByName(name: String): List<Product>
 }

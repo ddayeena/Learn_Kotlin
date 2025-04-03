@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.filament.android)
     implementation(libs.play.services.analytics.impl)
     implementation(libs.androidx.databinding.runtime)
+    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

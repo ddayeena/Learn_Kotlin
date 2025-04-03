@@ -21,6 +21,12 @@
         <item>Сортувати за ціною</item>
     </string-array>
 
+    <string-array name="product_sort_options">
+        <item>Імя (A-Z)</item>
+        <item>Імя (Z-A)</item>
+        <item>Ціна (зростання)</item>
+        <item>Ціна (спадання)</item>
+    </string-array>
 
 </resources>
 

@@ -1,12 +1,12 @@
 package com.example.learn
 
+import AdminProductsFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.learn.admin.AdminOrdersFragment
-import com.example.learn.admin.AdminProductsFragment
 import com.example.learn.admin.AdminProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

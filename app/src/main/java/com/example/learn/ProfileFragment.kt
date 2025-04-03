@@ -49,16 +49,13 @@ class ProfileFragment : Fragment() {
         val deleteButton = view.findViewById<Button>(R.id.delete_button)
         val editButton = view.findViewById<Button>(R.id.edit_button)
         val orderHistoryButton = view.findViewById<Button>(R.id.order_history_button)
- //       val addProductButton = view.findViewById<Button>(R.id.add_product_button)
         deleteButton.setOnClickListener {
             deleteUser()
         }
         editButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_editProfileFragment)
         }
-//        addProductButton.setOnClickListener {
-//            findNavController().navigate(R.id.action_mainPageFragment_to_addProductFragment)
-//        }
+
         orderHistoryButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_orderHistoryFragment)
         }

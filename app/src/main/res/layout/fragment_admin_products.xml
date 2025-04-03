@@ -1,39 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/search_product"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Пошук"
-        android:drawableStart="@android:drawable/ic_menu_search"
-        android:padding="8dp"
-        android:background="@android:drawable/editbox_background"
-        android:inputType="text" />
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Пошук за назвою товару"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:padding="12dp"
+            android:background="@android:color/transparent" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_product_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Додати товар"
+        android:textSize="16sp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:paddingHorizontal="16dp"
+        android:layout_gravity="center_horizontal"
+        app:cornerRadius="12dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        android:textColor="@color/black"/>
 
     <Spinner
         android:id="@+id/sort_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:entries="@array/sort_options" />
-
-    <Button
-        android:id="@+id/button_add_product"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Додати товар"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:textColor="@android:color/white" />
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/black"
+        android:padding="8dp"
+        android:entries="@array/product_sort_options"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_products"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="12dp" />
+
 </LinearLayout>
