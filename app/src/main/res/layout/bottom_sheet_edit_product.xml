@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Назва товару" />
+
+    <EditText
+        android:id="@+id/edit_product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Опис" />
+
+    <EditText
+        android:id="@+id/edit_product_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ціна"
+        android:inputType="numberDecimal" />
+
+    <ImageView
+        android:id="@+id/edit_product_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_cookie_24" />
+
+    <Button
+        android:id="@+id/button_select_image_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вибрати зображення" />
+
+
+    <Spinner
+        android:id="@+id/edit_product_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/product_categories"/>
+
+    <EditText
+        android:id="@+id/edit_product_stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Наявність (шт)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/edit_product_weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Вага (г)"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Зберегти" />
+
+</LinearLayout>

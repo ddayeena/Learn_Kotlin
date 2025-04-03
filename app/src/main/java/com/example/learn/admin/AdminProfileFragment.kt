@@ -1,4 +1,4 @@
-package com.example.learn
+package com.example.learn.admin
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.learn.MainActivity
+import com.example.learn.R
 import com.example.learn.data.dao.UserDao
 import com.example.learn.data.database.AppDatabase
 import com.example.learn.data.entities.User
@@ -24,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class ProfileFragment : Fragment() {
+class AdminProfileFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var userDao: UserDao
     private var currentUser: User? = null
@@ -34,7 +36,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_admin_profile, container, false)
 
         imageView = view.findViewById(R.id.user_image)
 
@@ -46,19 +48,12 @@ class ProfileFragment : Fragment() {
 
 
         val logoutButton = view.findViewById<Button>(R.id.logout_button)
-        val deleteButton = view.findViewById<Button>(R.id.delete_button)
         val editButton = view.findViewById<Button>(R.id.edit_button)
-        val orderHistoryButton = view.findViewById<Button>(R.id.order_history_button)
-        deleteButton.setOnClickListener {
-            deleteUser()
-        }
+
         editButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainPageFragment_to_editProfileFragment)
+            findNavController().navigate(R.id.action_adminMainPageFragment_to_editProfileFragment)
         }
 
-        orderHistoryButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainPageFragment_to_orderHistoryFragment)
-        }
         logoutButton.setOnClickListener {
             logoutUser()
             navigateToAuthorization()

@@ -23,7 +23,23 @@
         <action
             android:id="@+id/action_authorizationFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_authorizationFragment_to_adminMainPageFragment"
+            app:destination="@id/adminMainPageFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/adminMainPageFragment"
+        android:name="com.example.learn.AdminMainPageFragment"
+        android:label="Admin Page Fragment" >
+        <action
+            android:id="@+id/action_adminMainPageFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_adminMainPageFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/registrationFragment"
@@ -76,6 +92,9 @@
         <action
             android:id="@+id/action_editProfileFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_editProfileFragment_to_adminMainPageFragment"
+            app:destination="@id/adminMainPageFragment" />
     </fragment>
 
     <fragment
@@ -92,8 +111,8 @@
         android:name="com.example.learn.AddProductFragment"
         android:label="Add Product Fragment" >
         <action
-            android:id="@+id/action_addProductFragment_to_mainPageFragment"
-            app:destination="@id/mainPageFragment" />
+            android:id="@+id/action_addProductFragment_to_adminMainPageFragment"
+            app:destination="@id/adminMainPageFragment" />
     </fragment>
 
     <fragment

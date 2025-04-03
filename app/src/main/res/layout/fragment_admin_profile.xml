@@ -124,19 +124,6 @@
         app:strokeColor="@color/black"
         app:strokeWidth="1dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/order_history_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Переглянути список замовлень"
-        android:textSize="16sp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:paddingHorizontal="16dp"
-        app:cornerRadius="8dp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp"/>
 
 
     <View
@@ -154,20 +141,13 @@
 
         <Button
             android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/material_dynamic_neutral50"
             android:text="Вийти"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:text="Видалити акаунт"
-            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </LinearLayout>

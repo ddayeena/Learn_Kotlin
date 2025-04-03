@@ -10,5 +10,23 @@
         <item>Солодощі</item>
     </string-array>
 
+    <string-array name="order_status_options">
+        <item>Усі</item>
+        <item>В очікуванні</item>
+        <item>Відправлено</item>
+        <item>Доставлено</item>
+    </string-array>
+    <string-array name="sort_options">
+        <item>Сортувати за назвою</item>
+        <item>Сортувати за ціною</item>
+    </string-array>
+
+    <string-array name="product_sort_options">
+        <item>Імя (A-Z)</item>
+        <item>Імя (Z-A)</item>
+        <item>Ціна (зростання)</item>
+        <item>Ціна (спадання)</item>
+    </string-array>
+
 </resources>
 
